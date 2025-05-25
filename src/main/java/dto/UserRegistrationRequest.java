@@ -1,34 +1,27 @@
-package com.example.demo.controller;
+package com.example.demo.dto;
 
-import com.example.demo.dto.UserRegistrationRequest;
-import com.example.demo.dto.UserResponse;
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
+public class UserRegistrationRequest {
 
-    @Autowired
-    private UserRepository userRepository;
+    @NotBlank
+    private String username;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    @Email
+    private String email;
 
-    @PostMapping("/register")
-    public UserResponse registerUser(@Valid @RequestBody UserRegistrationRequest request) {
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("user");
-        user.setBlocked(false);
-        user.setEloRating(1000);
-        User savedUser = userRepository.save(user);
-        return new UserResponse(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
-    }
+    @Size(min = 6)
+    private String password;
+
+    // Getters and Setters
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 }
