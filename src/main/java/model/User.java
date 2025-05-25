@@ -1,5 +1,5 @@
 package model;
-
+import java.time.LocalDateTime;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.Id;
