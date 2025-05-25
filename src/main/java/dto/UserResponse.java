@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package dto;
 
 public class UserResponse {
     private Long id;

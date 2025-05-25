@@ -1,9 +1,9 @@
-package com.example.demo.controller;
+package controller;
 
-import com.example.demo.dto.UserRegistrationRequest;
-import com.example.demo.dto.UserResponse;
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import dto.UserRegistrationRequest;
+import dto.UserResponse;
+import model.User;
+import repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
