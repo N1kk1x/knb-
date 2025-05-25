@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль</title>
+    <link rel="stylesheet" href="design.css">
+    <style>
+        .profile {
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        .profile h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .profile p {
+            margin-bottom: 0.5rem;
+        }
+        .friends-list {
+            margin-top: 1rem;
+        }
+        .friends-list h3 {
+            margin-bottom: 0.5rem;
+        }
+        .friend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .friend-item button {
+            margin-left: 0.5rem;
+        }
+        .search-friends {
+            margin-top: 1rem;
+        }
+        .search-friends input {
+            width: calc(100% - 22px);
+            padding: 0.5rem;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">КНБ+</div>
+        <nav>
+            <ul>
+                <li><a href="profile.html">Профиль</a></li>
+                <li><a href="main.html">Главная</a></li>
+                <li><a href="register.html">Регистрация</a></li>
+                <li><a href="login.html">Вход</a></li>
+                <li><a href="about.html">О сайте</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="profile">
+            <h2>Мой профиль</h2>
+            <p><strong>Никнейм:</strong> Игрок123</p>
+            <p><strong>Уровень привилегий:</strong> Игрок</p>
+            <p><strong>Количество сыгранных матчей:</strong> 50</p>
+            <p><strong>Количество побед:</strong> 30</p>
+            <p><strong>Рейтинг по системе Elo:</strong> 1200</p>
+            <div class="friends-list">
+                <h3>Список друзей</h3>
+                <div class="friend-item">
+                    <span>Друг1</span>
+                    <div>
+                        <button onclick="inviteToGame('Друг1')">Пригласить в игру</button>
+                        <button onclick="viewProfile('Друг1')">Профиль игрока</button>
+                        <button onclick="viewProfile('Друг1')">Удалить из друзей</button>
+                    </div>
+                </div>
+                <div class="friend-item">
+                    <span>Друг2</span>
+                    <div>
+                        <button onclick="inviteToGame('Друг2')">Пригласить в игру</button>
+                        <button onclick="viewProfile('Друг2')">Профиль игрока</button>
+                        <button onclick="viewProfile('Друг1')">Удалить из друзей</button>
+                    </div>
+                </div>
+                <!-- можно больше друзей по аналогии -->
+            </div>
+            <div class="search-friends">
+                <h3>Добавить друга</h3>
+                <input type="text" id="searchFriendInput" placeholder="Введите никнейм друга...">
+                <button onclick="addFriend()">Добавить</button>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
+    </footer>
+    <script>
+        function inviteToGame(friendName) {
+            alert(`Приглашение в игру отправлено ${friendName}`);
+            // TODO: отправка приглашения
+        }
+
+        function viewProfile(friendName) {
+            alert(`Просмотр профиля ${friendName}`);
+            // TODO: логика перехода на профиль друга
+        }
+
+        function addFriend() {
+            const friendName = document.getElementById('searchFriendInput').value;
+            if (friendName) {
+                alert(`Друг ${friendName} добавлен!`);
+                // TODO: добавить логику добавления друга в список
+                document.getElementById('searchFriendInput').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
