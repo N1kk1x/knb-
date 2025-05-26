@@ -12,7 +12,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveUser(User user) {
-        System.out.println("Saving user: " + user.getUsername()); // Логирование
         return userRepository.save(user);
     }
 }
