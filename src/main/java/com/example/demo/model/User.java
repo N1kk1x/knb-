@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "users")
@@ -24,13 +25,20 @@ public class User {
     private String role;
 
     @Column(name = "is_blocked", columnDefinition = "TINYINT(1) DEFAULT 0")
-    private Boolean isBlocked;
+    private boolean isBlocked;
 
     @Column(name = "elo_rating", columnDefinition = "INT DEFAULT 1000")
     private Integer eloRating;
 
+    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    public User() {
+        this.eloRating = 1000;
+        this.isBlocked = false;
+        this.role = "user";
+    }
 
     // Геттеры и сеттеры
 
@@ -39,7 +47,7 @@ public class User {
     public String getEmail() { return email; }
     public String getPassword() { return password; }
     public String getRole() { return role; }
-    public Boolean getIsBlocked() { return isBlocked; }
+    public boolean getIsBlocked() { return isBlocked; }
     public Integer getEloRating() { return eloRating; }
     public LocalDateTime getCreatedAt() { return createdAt; }
 
@@ -47,7 +55,6 @@ public class User {
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
     public void setRole(String role) { this.role = role; }
-    public void setIsBlocked(Boolean isBlocked) { this.isBlocked = isBlocked; }
+    public void setIsBlocked(boolean isBlocked) { this.isBlocked = isBlocked; }
     public void setEloRating(Integer eloRating) { this.eloRating = eloRating; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
