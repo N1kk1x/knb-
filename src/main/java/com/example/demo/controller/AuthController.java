@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserRegistrationRequest;
 import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.UserRegistrationRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.model.User;
 import com.example.demo.service.AuthService;
@@ -17,22 +17,26 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRegistrationRequest req) {
-        User u = new User();
-        u.setUsername(req.getUsername());
-        u.setEmail(req.getEmail());
-        u.setPassword(req.getPassword());
-        u.setRole("user");
-        u.setIsBlocked(false);
-        u.setEloRating(1000);
-        User saved = authService.register(u);
-        return ResponseEntity.ok(new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail()));
+    public ResponseEntity<UserResponse> register(@RequestBody UserRegistrationRequest request) {
+        User newUser = new User();
+        newUser.setUsername(request.getUsername());
+        newUser.setEmail(request.getEmail());
+        newUser.setPassword(request.getPassword());
+
+        User savedUser = authService.register(newUser);
+        return ResponseEntity.ok(new UserResponse(savedUser));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest req) {
-        return authService.login(req.getUsername(), req.getPassword())
-                .map(u -> ResponseEntity.ok(new UserResponse(u.getId(), u.getUsername(), u.getEmail())))
-                .orElseGet(() -> ResponseEntity.status(401).build());
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        var userOptional = authService.login(request.getUsername(), request.getPassword());
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return ResponseEntity.ok(new UserResponse(user));
+        } else {
+            return ResponseEntity
+                    .status(401)
+                    .body("Ошибка входа: неверное имя пользователя или пароль");
+        }
     }
 }

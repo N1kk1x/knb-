@@ -1,36 +1,33 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserRegistrationRequest;
 import com.example.demo.dto.UserResponse;
 import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.UserService;
-import jakarta.validation.Valid;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Integer id) {
+        Optional<User> userOpt = userRepository.findById(id);
+        return userOpt
+                .map(user -> ResponseEntity.ok(new UserResponse(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
-    @PostMapping("/register")
-    public UserResponse registerUser(@Valid @RequestBody UserRegistrationRequest request) {
-        System.out.println("Registering user: " + request.getUsername()); // Логирование
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("user");
-        user.setIsBlocked(false);
-        user.setEloRating(1000);
-
-        User savedUser = userService.saveUser(user);
-        return new UserResponse(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+    @GetMapping("/by-username/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+        return userRepository.findByUsername(username)
+                .map(user -> ResponseEntity.ok(new UserResponse(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

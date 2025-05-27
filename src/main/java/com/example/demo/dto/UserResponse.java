@@ -1,19 +1,22 @@
 package com.example.demo.dto;
 
+import com.example.demo.model.User;
+
 public class UserResponse {
     private Integer id;
     private String username;
     private String email;
+    private Integer eloRating;
 
-    public UserResponse(Integer id, String username, String email) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
+    public UserResponse(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.eloRating = user.getEloRating();
     }
-
-    // Геттеры
 
     public Integer getId() { return id; }
     public String getUsername() { return username; }
     public String getEmail() { return email; }
+    public Integer getEloRating() { return eloRating; }
 }
