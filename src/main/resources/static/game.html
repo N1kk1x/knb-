@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
-
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Игра КНБ+</title>
+    <link rel="stylesheet" href="design.css">
 </head>
-
 <body>
-<th:block layout:fragment="content">
+<header>
+    <div class="logo">КНБ+</div>
+    <nav>
+        <ul>
+            <li><a href="profile.html">Профиль</a></li>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="register.html">Регистрация</a></li>
+            <li><a href="login.html">Вход</a></li>
+            <li><a href="about.html">О сайте</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
     <section class="game">
         <div class="game-board">
             <button class="game-button" onclick="makeMove('rock')">
@@ -30,7 +41,10 @@
             <button onclick="sendMessage()">Отправить</button>
         </div>
     </section>
-</th:block>
+</main>
+<footer>
+    <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
+</footer>
+<script src="scripts.js"></script>
 </body>
-
 </html>

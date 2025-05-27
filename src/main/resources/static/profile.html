@@ -44,75 +44,160 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">КНБ+</div>
-        <nav>
-            <ul>
-                <li><a href="profile.html">Профиль</a></li>
-                <li><a href="main.html">Главная</a></li>
-                <li><a href="register.html">Регистрация</a></li>
-                <li><a href="login.html">Вход</a></li>
-                <li><a href="about.html">О сайте</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="profile">
-            <h2>Мой профиль</h2>
-            <p><strong>Никнейм:</strong> Игрок123</p>
-            <p><strong>Уровень привилегий:</strong> Игрок</p>
-            <p><strong>Количество сыгранных матчей:</strong> 50</p>
-            <p><strong>Количество побед:</strong> 30</p>
-            <p><strong>Рейтинг по системе Elo:</strong> 1200</p>
-            <div class="friends-list">
-                <h3>Список друзей</h3>
-                <div class="friend-item">
-                    <span>Друг1</span>
-                    <div>
-                        <button onclick="inviteToGame('Друг1')">Пригласить в игру</button>
-                        <button onclick="viewProfile('Друг1')">Профиль игрока</button>
-                        <button onclick="viewProfile('Друг1')">Удалить из друзей</button>
-                    </div>
-                </div>
-                <div class="friend-item">
-                    <span>Друг2</span>
-                    <div>
-                        <button onclick="inviteToGame('Друг2')">Пригласить в игру</button>
-                        <button onclick="viewProfile('Друг2')">Профиль игрока</button>
-                        <button onclick="viewProfile('Друг1')">Удалить из друзей</button>
-                    </div>
-                </div>
-                <!-- можно больше друзей по аналогии -->
+<header>
+    <div class="logo">КНБ+</div>
+    <nav>
+        <ul>
+            <li><a href="profile.html">Профиль</a></li>
+            <li><a href="main.html">Главная</a></li>
+            <li><a href="register.html">Регистрация</a></li>
+            <li><a href="login.html">Вход</a></li>
+            <li><a href="about.html">О сайте</a></li>
+        </ul>
+    </nav>
+</header>
+<main>
+    <section class="profile">
+        <h2>Мой профиль</h2>
+        <p><strong>Никнейм:</strong> <span id="username">Загрузка...</span></p>
+        <p><strong>Email:</strong> <span id="email">Загрузка...</span></p>
+        <p><strong>Уровень привилегий:</strong> <span id="role">Загрузка...</span></p>
+        <p><strong>Количество сыгранных матчей:</strong> <span id="matchesPlayed">Загрузка...</span></p>
+        <p><strong>Количество побед:</strong> <span id="wins">Загрузка...</span></p>
+        <p><strong>Рейтинг по системе Elo:</strong> <span id="eloRating">Загрузка...</span></p>
+        <div class="friends-list">
+            <h3>Список друзей</h3>
+            <div id="friendsList">
+                <!-- Друзья будут загружены здесь -->
             </div>
-            <div class="search-friends">
-                <h3>Добавить друга</h3>
-                <input type="text" id="searchFriendInput" placeholder="Введите никнейм друга...">
-                <button onclick="addFriend()">Добавить</button>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
-    </footer>
-    <script>
-        function inviteToGame(friendName) {
-            alert(`Приглашение в игру отправлено ${friendName}`);
-            // TODO: отправка приглашения
-        }
+        </div>
+        <div class="search-friends">
+            <h3>Добавить друга</h3>
+            <input type="text" id="searchFriendInput" placeholder="Введите никнейм друга...">
+            <button onclick="addFriend()">Добавить</button>
+        </div>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
+</footer>
+<script>
+    // Функция для загрузки данных профиля
+    function loadProfileData() {
+        fetch('/api/users/me', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('username').textContent = data.username;
+            document.getElementById('email').textContent = data.email;
+            document.getElementById('role').textContent = data.role;
+            document.getElementById('matchesPlayed').textContent = data.matchesPlayed;
+            document.getElementById('wins').textContent = data.wins;
+            document.getElementById('eloRating').textContent = data.eloRating;
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка при загрузке данных профиля');
+        });
+    }
 
-        function viewProfile(friendName) {
-            alert(`Просмотр профиля ${friendName}`);
-            // TODO: логика перехода на профиль друга
-        }
-
-        function addFriend() {
-            const friendName = document.getElementById('searchFriendInput').value;
-            if (friendName) {
+    // Функция для добавления друга
+    function addFriend() {
+        const friendName = document.getElementById('searchFriendInput').value;
+        if (friendName) {
+            fetch('/api/friends/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ friendName }),
+            })
+            .then(response => response.json())
+            .then(data => {
                 alert(`Друг ${friendName} добавлен!`);
-                // TODO: добавить логику добавления друга в список
                 document.getElementById('searchFriendInput').value = '';
-            }
+                loadFriendsList(); // Обновляем список друзей
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Ошибка при добавлении друга');
+            });
         }
-    </script>
+    }
+
+    // Функция для загрузки списка друзей
+    function loadFriendsList() {
+        fetch('/api/friends', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const friendsList = document.getElementById('friendsList');
+            friendsList.innerHTML = '';
+            data.forEach(friend => {
+                const friendItem = document.createElement('div');
+                friendItem.className = 'friend-item';
+                friendItem.innerHTML = `
+                    <span>${friend.username}</span>
+                    <div>
+                        <button onclick="inviteToGame('${friend.username}')">Пригласить в игру</button>
+                        <button onclick="viewProfile('${friend.username}')">Профиль игрока</button>
+                        <button onclick="removeFriend('${friend.username}')">Удалить из друзей</button>
+                    </div>
+                `;
+                friendsList.appendChild(friendItem);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка при загрузке списка друзей');
+        });
+    }
+
+    // Функция для приглашения в игру
+    function inviteToGame(friendName) {
+        alert(`Приглашение в игру отправлено ${friendName}`);
+        // TODO: отправка приглашения
+    }
+
+    // Функция для просмотра профиля друга
+    function viewProfile(friendName) {
+        alert(`Просмотр профиля ${friendName}`);
+        // TODO: логика перехода на профиль друга
+    }
+
+    // Функция для удаления друга
+    function removeFriend(friendName) {
+        fetch('/api/friends/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ friendName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(`Друг ${friendName} удален!`);
+            loadFriendsList(); // Обновляем список друзей
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Ошибка при удалении друга');
+        });
+    }
+
+    // Загружаем данные профиля и список друзей при загрузке страницы
+    window.onload = function() {
+        loadProfileData();
+        loadFriendsList();
+    };
+</script>
 </body>
 </html>

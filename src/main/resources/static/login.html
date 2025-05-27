@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход</title>
+  <link rel="stylesheet" href="design.css">
+  <style>
+    .login-form {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .login-form h2 {
+        text-align: center;
+    }
+    .login-form input {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+    .login-form button {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: #003366;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">КНБ+</div>
+  <nav>
+    <ul>
+      <li><a href="profile.html">Профиль</a></li>
+      <li><a href="main.html">Главная</a></li>
+      <li><a href="register.html">Регистрация</a></li>
+      <li><a href="login.html">Вход</a></li>
+      <li><a href="about.html">О сайте</a></li>
+    </ul>
+  </nav>
+</header>
+<main>
+  <section class="login-form">
+    <h2>Вход</h2>
+    <form id="loginForm" action="/api/auth/login" method="post">
+      <input type="text" id="username" name="username" placeholder="Имя пользователя" required>
+      <input type="password" id="password" name="password" placeholder="Пароль" required>
+      <button type="submit">Войти</button>
+    </form>
+  </section>
+</main>
+<footer>
+  <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
+</footer>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Ошибка входа');
+          }
+          return response.json();
+      })
+      .then(data => {
+          alert('Вход выполнен успешно!');
+          window.location.href = 'profile.html';
+      })
+      .catch(error => {
+          console.error('Ошибка:', error);
+          alert('Ошибка входа: неверное имя пользователя или пароль');
+      });
+  });
+</script>
+</body>
+</html>
