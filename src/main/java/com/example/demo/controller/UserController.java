@@ -1,12 +1,12 @@
-package controller;
+package com.example.demo.controller;
 
-import dto.UserRegistrationRequest;
-import dto.UserResponse;
-import model.User;
+import com.example.demo.dto.UserRegistrationRequest;
+import com.example.demo.dto.UserResponse;
+import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import service.UserService;
+import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,7 +27,7 @@ public class UserController {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole("user");
-        user.setBlocked(false);
+        user.setIsBlocked(false);
         user.setEloRating(1000);
 
         User savedUser = userService.saveUser(user);

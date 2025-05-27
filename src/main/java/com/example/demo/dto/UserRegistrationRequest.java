@@ -1,21 +1,12 @@
-package dto;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+package com.example.demo.dto;
 
 public class UserRegistrationRequest {
-
-    @NotBlank
     private String username;
-
-    @Email
     private String email;
-
-    @Size(min = 6)
     private String password;
 
-    // Getters and Setters
+    // Геттеры и сеттеры
+
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 

@@ -1,6 +1,6 @@
-package security;
+package com.example.demo.security;
 
-import db_connection.DatabaseConnection;
+import com.example.demo.db_connection.DatabaseConnection;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.sql.Connection;
