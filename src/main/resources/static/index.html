@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+  <title>Главная</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+  <h1>Добро пожаловать в игру КНБ+!</h1>
+  <p>Играйте в любимую игру "Камень-ножницы-бумага" онлайн.</p>
+  <button onclick="window.location.href='game.html'">Играть</button>
+</th:block>
+</body>
+
+</html>

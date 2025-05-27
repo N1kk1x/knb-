@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<head>
+    <title>Игра КНБ+</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <section class="game">
+        <div class="game-board">
+            <button class="game-button" onclick="makeMove('rock')">
+                <img src="rock.png" alt="Камень">
+            </button>
+            <button class="game-button" onclick="makeMove('paper')">
+                <img src="paper.png" alt="Бумага">
+            </button>
+            <button class="game-button" onclick="makeMove('scissors')">
+                <img src="scissors.png" alt="Ножницы">
+            </button>
+        </div>
+        <div class="chat-window">
+            <h3>Чат с соперником</h3>
+            <div class="chat-messages" id="chatMessages">
+                <!-- Сообщения будут отображаться здесь -->
+            </div>
+            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <button onclick="sendMessage()">Отправить</button>
+        </div>
+    </section>
+</th:block>
+</body>
+
+</html>
