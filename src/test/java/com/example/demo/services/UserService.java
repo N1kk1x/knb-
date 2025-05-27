@@ -1,8 +1,8 @@
 package com.example.demo.services;
 
-import model.User;
+import com.example.demo.model.User;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
+import com.example.demo.repository.UserRepository;
 
 @Service
 public class UserService {
