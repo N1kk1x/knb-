@@ -1,8 +1,8 @@
 let playerScore = 0;
 let computerScore = 0;
 
-// Локальная логика игры КНБ
-function makeMove(playerMove) {
+// Функция доступна в глобальной области видимости
+window.makeMove = function(playerMove) {
     const moves = ['rock', 'paper', 'scissors'];
     const computerMove = moves[Math.floor(Math.random() * moves.length)];
 
@@ -17,7 +17,7 @@ function makeMove(playerMove) {
     }
 
     updateScoreboard();
-}
+};
 
 function determineWinner(player, computer) {
     if (player === computer) {
@@ -34,12 +34,20 @@ function determineWinner(player, computer) {
 }
 
 function updateScoreboard() {
-    document.getElementById('playerScore')?.textContent = playerScore;
-    document.getElementById('computerScore')?.textContent = computerScore;
+    const playerScoreElement = document.getElementById('playerScore');
+    const computerScoreElement = document.getElementById('computerScore');
+
+    if (playerScoreElement) {
+        playerScoreElement.textContent = playerScore;
+    }
+
+    if (computerScoreElement) {
+        computerScoreElement.textContent = computerScore;
+    }
 }
 
-// Отправка сообщения в чат
-function sendMessage() {
+// Чат
+window.sendMessage = function() {
     const input = document.getElementById('chatInput');
     const message = input.value.trim();
     if (message) {
@@ -50,10 +58,10 @@ function sendMessage() {
         input.value = '';
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-}
+};
 
-// Загрузка списка друзей
-function loadFriendsList() {
+// Друзья
+window.loadFriendsList = function() {
     fetch('/api/friends', {
         method: 'GET',
         headers: {
@@ -87,18 +95,17 @@ function loadFriendsList() {
         console.error('Ошибка:', error);
         alert('Ошибка при загрузке списка друзей');
     });
-}
+};
 
-// Заглушки для приглашения в игру и просмотра профиля
-function inviteToGame(username) {
+// Заглушки
+window.inviteToGame = function(username) {
     alert(`Вы пригласили игрока ${username} в игру. Функция в разработке.`);
-}
+};
 
-function viewProfile(username) {
+window.viewProfile = function(username) {
     alert(`Открытие профиля игрока ${username}. Функция в разработке.`);
-}
+};
 
-function removeFriend(username) {
-    // Здесь вы можете реализовать удаление друга через API
+window.removeFriend = function(username) {
     alert(`Удаление ${username} из друзей. Функция в разработке.`);
-}
+};
