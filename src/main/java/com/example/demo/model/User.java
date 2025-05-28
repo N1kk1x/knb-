@@ -30,6 +30,13 @@ public class User {
     @Column(name = "elo_rating", columnDefinition = "INT DEFAULT 1000")
     private Integer eloRating;
 
+    @Column(name = "matches_played", columnDefinition = "INT DEFAULT 0")
+    private Integer matchesPlayed;
+
+    @Column(name = "wins", columnDefinition = "INT DEFAULT 0")
+    private Integer wins;
+
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -50,6 +57,14 @@ public class User {
     public boolean getIsBlocked() { return isBlocked; }
     public Integer getEloRating() { return eloRating; }
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    public Integer getMatchesPlayed() {
+        return matchesPlayed;
+    }
+
+    public Integer getWins() {
+        return wins;
+    }
 
     public void setUsername(String username) { this.username = username; }
     public void setEmail(String email) { this.email = email; }

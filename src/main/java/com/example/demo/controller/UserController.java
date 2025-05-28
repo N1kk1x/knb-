@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/users")
@@ -30,4 +31,14 @@ public class UserController {
                 .map(user -> ResponseEntity.ok(new UserResponse(user)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(Principal principal) {
+        String username = principal.getName();
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        return userOpt
+                .map(user -> ResponseEntity.ok(new UserResponse(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }

@@ -7,12 +7,16 @@ public class UserResponse {
     private String username;
     private String email;
     private Integer eloRating;
+    private Integer matchesPlayed;
+    private Integer wins;
 
     public UserResponse(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.eloRating = user.getEloRating();
+        this.matchesPlayed = user.getMatchesPlayed();
+        this.wins = user.getWins();
     }
 
     public Integer getId() { return id; }
