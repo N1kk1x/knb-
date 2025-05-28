@@ -59,6 +59,37 @@
 <footer>
   <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
 </footer>
-<script src="script.js"></script>
+<script>
+  document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch(`${API_BASE_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(`Ошибка входа: ${response.status} ${text}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        alert('Вход выполнен успешно!');
+        window.location.href = 'profile.html';
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+    });
+  });
+</script>
 </body>
 </html>
