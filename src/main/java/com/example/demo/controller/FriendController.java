@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AddFriendRequest;
 import com.example.demo.model.Friend;
-import com.example.demo.model.User;
 import com.example.demo.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
