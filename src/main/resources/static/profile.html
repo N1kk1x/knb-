@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Мой профиль</title>
-    <link rel="stylesheet" href="design.css">
+    <link rel="stylesheet" href="design.css" />
     <style>
         .profile {
             text-align: left;
@@ -73,7 +73,7 @@
         </div>
         <div class="search-friends">
             <h3>Добавить друга</h3>
-            <input type="text" id="searchFriendInput" placeholder="Введите никнейм друга...">
+            <input type="text" id="searchFriendInput" placeholder="Введите никнейм друга..." />
             <button onclick="addFriend()">Добавить</button>
         </div>
     </section>
@@ -82,7 +82,7 @@
     <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
 </footer>
 <script>
-    // Функция для загрузки данных профиля
+    // Функция для загрузки данных профиля с проверкой статуса ответа
     function loadProfileData() {
         fetch('/api/users/me', {
             method: 'GET',
@@ -90,7 +90,12 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             document.getElementById('username').textContent = data.username;
             document.getElementById('email').textContent = data.email;
@@ -101,11 +106,11 @@
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            alert('Ошибка при загрузке данных профиля');
+            alert('Ошибка при загрузке данных профиля: ' + error.message);
         });
     }
 
-    // Функция для загрузки списка друзей
+    // Аналогично обновляем функцию загрузки списка друзей
     function loadFriendsList() {
         fetch('/api/friends', {
             method: 'GET',
@@ -113,7 +118,12 @@
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             const friendsList = document.getElementById('friendsList');
             friendsList.innerHTML = '';
@@ -133,11 +143,11 @@
         })
         .catch(error => {
             console.error('Ошибка:', error);
-            alert('Ошибка при загрузке списка друзей');
+            alert('Ошибка при загрузке списка друзей: ' + error.message);
         });
     }
 
-    // Функция для добавления друга
+    // Функция добавления друга с проверкой ответа
     function addFriend() {
         const friendName = document.getElementById('searchFriendInput').value;
         if (friendName) {
@@ -148,20 +158,25 @@
                 },
                 body: JSON.stringify({ friendName }),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Ошибка сервера: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 alert(`Друг ${friendName} добавлен!`);
                 document.getElementById('searchFriendInput').value = '';
-                loadFriendsList(); // Обновляем список друзей
+                loadFriendsList();
             })
             .catch(error => {
                 console.error('Ошибка:', error);
-                alert('Ошибка при добавлении друга');
+                alert('Ошибка при добавлении друга: ' + error.message);
             });
         }
     }
 
-    // Загружаем данные профиля и список друзей при загрузке страницы
+    // Загружаем данные при загрузке страницы
     window.onload = function() {
         loadProfileData();
         loadFriendsList();
