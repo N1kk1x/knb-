@@ -17,11 +17,22 @@ public class FriendController {
     @Autowired
     private FriendService friendService;
 
+    @PostMapping("/add")
+    public ResponseEntity<?> addFriend(@RequestBody AddFriendRequest request, Principal principal) {
+        String username = principal.getName();
+        try {
+            friendService.addFriend(username, request.getFriendName());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<Friend>> getFriends(Principal principal) {
-        // Получаем имя текущего пользователя из Principal
         String username = principal.getName();
         List<Friend> friends = friendService.getFriendsByUsername(username);
         return ResponseEntity.ok(friends);
     }
 }
+

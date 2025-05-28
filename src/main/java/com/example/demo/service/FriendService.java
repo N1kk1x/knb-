@@ -18,9 +18,25 @@ public class FriendService {
     @Autowired
     private UserRepository userRepository;
 
+    public void addFriend(String username, String friendName) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден: " + username));
+
+        User friend = userRepository.findByUsername(friendName)
+                .orElseThrow(() -> new IllegalArgumentException("Друг не найден: " + friendName));
+
+        Friend friendEntity = new Friend();
+        friendEntity.setUserId(user.getId());
+        friendEntity.setFriendId(friend.getId());
+        friendEntity.setStatus("pending");
+
+        friendRepository.save(friendEntity);
+    }
+
     public List<Friend> getFriendsByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден: " + username));
         return friendRepository.findByUserId(user.getId());
     }
 }
+
