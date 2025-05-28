@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Игра КНБ+</title>
-    <link rel="stylesheet" href="design.css">
+    <link rel="stylesheet" href="design.css" />
 </head>
 <body>
 <header>
@@ -23,13 +23,13 @@
     <section class="game">
         <div class="game-board">
             <button class="game-button" onclick="makeMove('rock')">
-                <img src="rock.png" alt="Камень">
+                <img src="rock.png" alt="Камень" />
             </button>
             <button class="game-button" onclick="makeMove('paper')">
-                <img src="paper.png" alt="Бумага">
+                <img src="paper.png" alt="Бумага" />
             </button>
             <button class="game-button" onclick="makeMove('scissors')">
-                <img src="scissors.png" alt="Ножницы">
+                <img src="scissors.png" alt="Ножницы" />
             </button>
         </div>
         <div class="chat-window">
@@ -37,7 +37,7 @@
             <div class="chat-messages" id="chatMessages">
                 <!-- Сообщения будут отображаться здесь -->
             </div>
-            <input type="text" id="chatInput" placeholder="Введите сообщение...">
+            <input type="text" id="chatInput" placeholder="Введите сообщение..." />
             <button onclick="sendMessage()">Отправить</button>
         </div>
     </section>
@@ -45,6 +45,9 @@
 <footer>
     <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
 </footer>
+
+<!-- Подключаем скрипт после загрузки DOM -->
 <script src="script.js"></script>
+
 </body>
 </html>

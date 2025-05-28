@@ -11,7 +11,7 @@ public class UserResponse {
     private Integer wins;
 
     public UserResponse(User user) {
-        this.id = user.getId();
+        this.id = user.getId();   // Integer
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.eloRating = user.getEloRating();
@@ -23,4 +23,6 @@ public class UserResponse {
     public String getUsername() { return username; }
     public String getEmail() { return email; }
     public Integer getEloRating() { return eloRating; }
+    public Integer getMatchesPlayed() { return matchesPlayed; }
+    public Integer getWins() { return wins; }
 }

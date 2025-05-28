@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.FriendResponse;
 import com.example.demo.model.Friend;
 import com.example.demo.model.User;
 import com.example.demo.repository.FriendRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendService {
@@ -26,17 +28,21 @@ public class FriendService {
                 .orElseThrow(() -> new IllegalArgumentException("Друг не найден: " + friendName));
 
         Friend friendEntity = new Friend();
-        friendEntity.setUserId(user.getId());
-        friendEntity.setFriendId(friend.getId());
+        friendEntity.setUserId(user.getId());      // Integer
+        friendEntity.setFriendId(friend.getId());  // Integer
         friendEntity.setStatus("pending");
 
         friendRepository.save(friendEntity);
     }
 
-    public List<Friend> getFriendsByUsername(String username) {
+    public List<FriendResponse> getFriendsByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден: " + username));
-        return friendRepository.findByUserId(user.getId());
+
+        List<Friend> friends = friendRepository.findByUserId(user.getId());
+
+        return friends.stream()
+                .map(FriendResponse::new)
+                .collect(Collectors.toList());
     }
 }
-

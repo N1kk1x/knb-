@@ -1,10 +1,11 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AddFriendRequest;
-import com.example.demo.model.Friend;
+import com.example.demo.dto.FriendResponse;
 import com.example.demo.service.FriendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,6 +20,10 @@ public class FriendController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addFriend(@RequestBody AddFriendRequest request, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не аутентифицирован");
+        }
+
         String username = principal.getName();
         try {
             friendService.addFriend(username, request.getFriendName());
@@ -29,10 +34,13 @@ public class FriendController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Friend>> getFriends(Principal principal) {
+    public ResponseEntity<List<FriendResponse>> getFriends(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         String username = principal.getName();
-        List<Friend> friends = friendService.getFriendsByUsername(username);
+        List<FriendResponse> friends = friendService.getFriendsByUsername(username);
         return ResponseEntity.ok(friends);
     }
 }
-
