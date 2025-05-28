@@ -11,7 +11,7 @@ public class UserResponse {
     private Integer wins;
 
     public UserResponse(User user) {
-        this.id = user.getId();   // Integer
+        this.id = user.getId();
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.eloRating = user.getEloRating();
