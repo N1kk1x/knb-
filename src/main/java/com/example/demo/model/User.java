@@ -27,6 +27,9 @@ public class User {
     @Column(name = "is_blocked", columnDefinition = "TINYINT(1) DEFAULT 0")
     private boolean isBlocked;
 
+    @Column(name = "is_enabled", columnDefinition = "TINYINT(1) DEFAULT 0")
+    private boolean isEnabled;
+
     @Column(name = "elo_rating", columnDefinition = "INT DEFAULT 1000")
     private Integer eloRating;
 
@@ -36,7 +39,6 @@ public class User {
     @Column(name = "wins", columnDefinition = "INT DEFAULT 0")
     private Integer wins;
 
-
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -44,6 +46,7 @@ public class User {
     public User() {
         this.eloRating = 1000;
         this.isBlocked = false;
+        this.isEnabled = false;
         this.role = "user";
     }
 
@@ -55,21 +58,17 @@ public class User {
     public String getPassword() { return password; }
     public String getRole() { return role; }
     public boolean getIsBlocked() { return isBlocked; }
+    public boolean isEnabled() { return isEnabled; }
     public Integer getEloRating() { return eloRating; }
     public LocalDateTime getCreatedAt() { return createdAt; }
-
-    public Integer getMatchesPlayed() {
-        return matchesPlayed;
-    }
-
-    public Integer getWins() {
-        return wins;
-    }
+    public Integer getMatchesPlayed() { return matchesPlayed; }
+    public Integer getWins() { return wins; }
 
     public void setUsername(String username) { this.username = username; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
     public void setRole(String role) { this.role = role; }
     public void setIsBlocked(boolean isBlocked) { this.isBlocked = isBlocked; }
+    public void setEnabled(boolean isEnabled) { this.isEnabled = isEnabled; }
     public void setEloRating(Integer eloRating) { this.eloRating = eloRating; }
 }
