@@ -50,7 +50,7 @@ public class ConfirmationTokenService {
         confirmationTokenRepository.save(confirmationToken);
 
         User user = confirmationToken.getUser();
-        user.setEnabled(true); // Предполагается, что у вас есть поле enabled в модели User
+        user.setEnabled(true);
         userRepository.save(user);
 
         return "Email подтвержден успешно";

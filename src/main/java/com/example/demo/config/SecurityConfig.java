@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Укажите адреса фронтенда, с которых разрешены запросы
+
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:63342",
                 "http://localhost:3000"

@@ -13,12 +13,15 @@ public class EmailService {
 
     public void sendConfirmationEmail(String to, String token) {
         String subject = "Подтверждение регистрации";
-        String text = "Пожалуйста, перейдите по ссылке для подтверждения регистрации: http://localhost:8080/api/auth/confirm?token=" + token;
+        String text = "Пожалуйста, перейдите по ссылке для подтверждения регистрации: " +
+                "http://localhost:8080/api/auth/confirm?token=" + token;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
+        message.setFrom("noreply@example.com"); // Укажите корректный адрес отправителя
         message.setSubject(subject);
         message.setText(text);
+
         mailSender.send(message);
     }
 }
