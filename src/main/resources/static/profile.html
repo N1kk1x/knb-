@@ -7,39 +7,39 @@
     <link rel="stylesheet" href="design.css" />
     <style>
         .profile {
-            text-align: left;
-            margin: 2rem auto;
-            max-width: 600px;
+          text-align: left;
+          margin: 2rem auto;
+          max-width: 600px;
         }
         .profile h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+          font-size: 1.5rem;
+          margin-bottom: 1rem;
         }
         .profile p {
-            margin-bottom: 0.5rem;
+          margin-bottom: 0.5rem;
         }
         .friends-list {
-            margin-top: 1rem;
+          margin-top: 1rem;
         }
         .friends-list h3 {
-            margin-bottom: 0.5rem;
+          margin-bottom: 0.5rem;
         }
         .friend-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
         }
         .friend-item button {
-            margin-left: 0.5rem;
+          margin-left: 0.5rem;
         }
         .search-friends {
-            margin-top: 1rem;
+          margin-top: 1rem;
         }
         .search-friends input {
-            width: calc(100% - 22px);
-            padding: 0.5rem;
-            margin-right: 10px;
+          width: calc(100% - 22px);
+          padding: 0.5rem;
+          margin-right: 10px;
         }
     </style>
 </head>
@@ -67,9 +67,7 @@
         <p><strong>Рейтинг по системе Elo:</strong> <span id="eloRating">Загрузка...</span></p>
         <div class="friends-list">
             <h3>Список друзей</h3>
-            <div id="friendsList">
-                <!-- Друзья будут загружены здесь -->
-            </div>
+            <div id="friendsList"></div>
         </div>
         <div class="search-friends">
             <h3>Добавить друга</h3>
@@ -81,6 +79,139 @@
 <footer>
     <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
 </footer>
-<script src="script.js"></script>
+
+<script>
+    const API_BASE_URL = 'http://localhost:8080';
+
+    function loadProfileData() {
+      fetch(`${API_BASE_URL}/api/users/me`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Ошибка при загрузке данных профиля: ${response.status} ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        document.getElementById('username').textContent = data.username;
+        document.getElementById('email').textContent = data.email;
+        document.getElementById('role').textContent = data.role;
+        document.getElementById('matchesPlayed').textContent = data.matchesPlayed;
+        document.getElementById('wins').textContent = data.wins;
+        document.getElementById('eloRating').textContent = data.eloRating;
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+      });
+    }
+
+    function loadFriendsList() {
+      fetch(`${API_BASE_URL}/api/friends`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Ошибка при загрузке списка друзей: ${response.status} ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then(data => {
+        const friendsList = document.getElementById('friendsList');
+        friendsList.innerHTML = '';
+        data.forEach(friend => {
+          const friendItem = document.createElement('div');
+          friendItem.className = 'friend-item';
+          friendItem.innerHTML = `
+            <span>${friend.username}</span>
+            <div>
+              <button onclick="inviteToGame('${friend.username}')">Пригласить в игру</button>
+              <button onclick="viewProfile('${friend.username}')">Профиль игрока</button>
+              <button onclick="removeFriend('${friend.username}')">Удалить из друзей</button>
+            </div>
+          `;
+          friendsList.appendChild(friendItem);
+        });
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+      });
+    }
+
+    function addFriend() {
+      const friendName = document.getElementById('searchFriendInput').value.trim();
+      if (!friendName) return;
+
+      fetch(`${API_BASE_URL}/api/friends/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ friendName }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Ошибка при добавлении друга: ${response.status} ${text}`);
+          });
+        }
+        return response.json();
+      })
+      .then(() => {
+        alert(`Друг ${friendName} добавлен!`);
+        document.getElementById('searchFriendInput').value = '';
+        loadFriendsList();
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+      });
+    }
+
+    function inviteToGame(username) {
+      alert(`Приглашение отправлено игроку: ${username}`);
+    }
+
+    function viewProfile(username) {
+      alert(`Открытие профиля игрока: ${username}`);
+    }
+
+    function removeFriend(username) {
+      if (!confirm(`Удалить ${username} из друзей?`)) return;
+
+      fetch(`${API_BASE_URL}/api/friends/remove`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ friendName: username }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.text().then(text => {
+            throw new Error(`Ошибка при удалении друга: ${response.status} ${text}`);
+          });
+        }
+        loadFriendsList();
+      })
+      .catch(error => {
+        console.error('Ошибка:', error);
+        alert(error.message);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProfileData();
+      loadFriendsList();
+    });
+</script>
 </body>
 </html>

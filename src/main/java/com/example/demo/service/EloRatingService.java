@@ -14,12 +14,6 @@ public class EloRatingService {
     @Autowired
     private UserRepository userRepository;
 
-    /**
-     * Обновляет рейтинги двух игроков после матча.
-     *
-     * @param winnerId ID победителя
-     * @param loserId  ID проигравшего
-     */
     @Transactional
     public void updateRatings(Integer winnerId, Integer loserId) {
         User winner = userRepository.findById(winnerId)
@@ -28,6 +22,21 @@ public class EloRatingService {
         User loser = userRepository.findById(loserId)
                 .orElseThrow(() -> new IllegalArgumentException("Проигравший не найден"));
 
+        updateRatings(winner, loser);
+    }
+
+    @Transactional
+    public void updateRatingsByUsername(String winnerUsername, String loserUsername) {
+        User winner = userRepository.findByUsername(winnerUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь-победитель не найден: " + winnerUsername));
+
+        User loser = userRepository.findByUsername(loserUsername)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь-проигравший не найден: " + loserUsername));
+
+        updateRatings(winner, loser);
+    }
+
+    private void updateRatings(User winner, User loser) {
         int winnerRating = winner.getEloRating();
         int loserRating = loser.getEloRating();
 
@@ -44,21 +53,10 @@ public class EloRatingService {
         userRepository.save(loser);
     }
 
-    /**
-     * Вычисляет ожидаемый результат на основе рейтингов.
-     */
     private double expectedScore(int ratingA, int ratingB) {
         return 1.0 / (1.0 + Math.pow(10, (ratingB - ratingA) / 400.0));
     }
 
-    /**
-     * Вычисляет новый рейтинг игрока.
-     *
-     * @param currentRating   текущий рейтинг
-     * @param actualScore     фактический результат (1 — победа, 0 — поражение)
-     * @param expectedScore   ожидаемый результат
-     * @return новый рейтинг
-     */
     private int calculateNewRating(int currentRating, int actualScore, double expectedScore) {
         return (int) Math.round(currentRating + K_FACTOR * (actualScore - expectedScore));
     }

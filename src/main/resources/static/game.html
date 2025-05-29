@@ -21,6 +21,10 @@
 </header>
 <main>
     <section class="game">
+        <h2>Выберите режим:</h2>
+        <button onclick="setMode('single')">Против компьютера</button>
+        <button onclick="setMode('pvp')">PvP</button>
+
         <div class="game-board">
             <button class="game-button" onclick="makeMove('rock')">
                 <img src="rock.png" alt="Камень" />
@@ -32,11 +36,22 @@
                 <img src="scissors.png" alt="Ножницы" />
             </button>
         </div>
+
+        <div class="moves">
+            <p id="player-move">Ваш выбор: -</p>
+            <p id="opponent-move">Ход соперника: -</p>
+        </div>
+
+        <div id="scoreboard" class="scoreboard">
+            <h3>Счёт</h3>
+            <p>Вы: 0</p>
+            <p>Соперник: 0</p>
+            <p>Ничьи: 0</p>
+        </div>
+
         <div class="chat-window">
             <h3>Чат с соперником</h3>
-            <div class="chat-messages" id="chatMessages">
-                <!-- Сообщения будут отображаться здесь -->
-            </div>
+            <div class="chat-messages" id="chatMessages"></div>
             <input type="text" id="chatInput" placeholder="Введите сообщение..." />
             <button onclick="sendMessage()">Отправить</button>
         </div>
@@ -46,8 +61,8 @@
     <p>&copy; 2025 КНБ+. Дмитрий Николаев, Никита Мальков.</p>
 </footer>
 
-<!-- Подключаем скрипт после загрузки DOM -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
